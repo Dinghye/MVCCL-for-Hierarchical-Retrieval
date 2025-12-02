@@ -2,7 +2,10 @@ import random
 import numpy as np
 import torch
 
-MAX_DEPTH = 7
+
+ROOT_LEMMA = "animal.n.01"
+
+MAX_DEPTH = 5
 MAX_ANCESTOR_DIST = 7
 LONG_DIST_THR = 3
 EMBED_DIM = 256
@@ -22,6 +25,15 @@ MVC_STAGES = {
     "hard": 4,
 }
 SEM_TOPK = 50
+
+EASY_REPLAY_RATIO_HARD = 0.1  # hard stage use 10% easy batch
+TEMP_EASY = 0.07
+TEMP_MEDIUM = 0.07
+TEMP_HARD = 0.10  # hard tempo kinda higer to lower push
+
+LAMBDA_RANK = 1.0  # The weight of the hierarchical sorting loss
+RANK_MARGIN = 0.2  # ranking margin
+
 
 
 def set_global_seeds(seed: int = SEED) -> None:

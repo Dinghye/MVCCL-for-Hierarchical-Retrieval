@@ -4,7 +4,9 @@ from sentence_transformers import SentenceTransformer
 
 
 def encode_texts_with_sbert(texts, model_name: str = "all-MiniLM-L6-v2", device: str = "cpu"):
-    """Encode the text into fixed embeddings using Sentence-Transformer."""
+    """
+    Encode the text into fixed embeddings using Sentence-Transformer.
+    """
     sbert = SentenceTransformer(model_name, device=device)
     embs = sbert.encode(
         texts,

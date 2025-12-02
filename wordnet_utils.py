@@ -112,3 +112,6 @@ def synset_to_text(syn):
 def build_texts(id2syn):
     """Build synset text descriptions"""
     return [synset_to_text(id2syn[i]) for i in range(len(id2syn))]
+
+
+

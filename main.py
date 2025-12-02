@@ -14,13 +14,23 @@ from config import (
     PRETRAIN_EPOCHS,
     SEM_TOPK,
     TOP_K,
+    RANK_MARGIN,
+    TEMP_EASY,
+    TEMP_MEDIUM,
+    TEMP_HARD,
+    LAMBDA_RANK,
+    EASY_REPLAY_RATIO_HARD,
+    NEG_PER_SAMPLE,
+    MVC_STAGES,
+    ROOT_LEMMA,
+    
     set_global_seeds,
 )
 from datasets import LongDistanceDataset, RegularHrdataset
 from embedding_utils import compute_semantic_neighbors, encode_texts_with_sbert
 from evaluation import evaluate_by_distance, plot_recall_by_distance
 from modeling import DualEncoder
-from training import finetune_long_distance, train_mvccl, train_regular
+from training import finetune_long_distance, train_mvccl_v3, train_regular
 from wordnet_utils import (
     assign_ids,
     build_parent_child_and_siblings,
@@ -29,7 +39,7 @@ from wordnet_utils import (
     compute_ancestors_and_distances,
 )
 
-ROOT_LEMMA = "animal.n.01"
+
 
 
 def prepare_wordnet_graph():
@@ -96,7 +106,7 @@ def run_hr_stage(base_embs, regular_state_dict, all_q_ids, ancestors, distances)
     model = DualEncoder(base_embs.to(DEVICE), proj_dim=EMBED_DIM).to(DEVICE)
     model.load_state_dict(regular_state_dict)
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=LR * 0.5)
+    optimizer = torch.optim.Adam(model.parameters(), lr=LR * 0.5) # as original paper said, lower the lr
 
     long_dataset = LongDistanceDataset(all_q_ids, ancestors, distances, long_dist_thr=LONG_DIST_THR)
     long_loader = DataLoader(
@@ -117,8 +127,8 @@ def run_hr_stage(base_embs, regular_state_dict, all_q_ids, ancestors, distances)
 def run_mvccl_stage(base_embs, all_q_ids, ancestors, distances, parents_of, siblings_of, sem_neighbors):
     model = DualEncoder(base_embs.to(DEVICE), proj_dim=EMBED_DIM).to(DEVICE)
 
-    print("MVCCL training ...")
-    train_mvccl(
+    print("MVCCL_v3 training ...")
+    train_mvccl_v3(
         model,
         all_q_ids,
         ancestors,
@@ -128,6 +138,16 @@ def run_mvccl_stage(base_embs, all_q_ids, ancestors, distances, parents_of, sibl
         sem_neighbors,
         num_nodes=base_embs.size(0),
         base_lr=LR,
+        batch_size=BATCH_SIZE,
+        neg_per_sample = NEG_PER_SAMPLE,
+        stages= MVC_STAGES,
+        easy_replay_ratio_hard =EASY_REPLAY_RATIO_HARD,
+        temp_easy = TEMP_EASY,
+        temp_mid= TEMP_MEDIUM,
+        temp_hard= TEMP_HARD,
+        rank_margin = RANK_MARGIN,
+        lambda_rank = LAMBDA_RANK,
+        device= DEVICE
     )
 
     print("\nMVCCL evaluation:")
