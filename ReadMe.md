@@ -71,6 +71,7 @@ w(d) =
 1.0, & d\ge 2.
 \end{cases}
 $$
+
 The weighted loss is:
 
 $$
@@ -85,8 +86,8 @@ Contrastive learning alone cannot guarantee: **parent should be closer than gran
 Thus, MVCCL v3 introduces a hierarchical ranking constraint:
 
 For each query q:
-* sample a near positive p_{\text{near}} with d_S \le 1
-* sample a mid positive p_{\text{mid}} with 2 \le d_S \le 3
+* sample a near positive $p_{\text{near}}$ with $d_S \le 1$
+* sample a mid positive $p_{\text{mid}}$ with $2 \le d_S \le 3$
 
 We enforce:
 
@@ -101,6 +102,7 @@ L_{\text{rank}} =
 \max(0,\;
 m - (\text{sim}(q,p_{\text{near}}) - \text{sim}(q,p_{\text{mid}})))
 $$
+
 with margin m = 0.2.
 
 This loss explicitly promotes:
@@ -111,6 +113,7 @@ This loss explicitly promotes:
 
 
 In each stage, the total loss is:
+
 $$
 L = L_{\text{contrastive}}^{(\text{easy/med/hard})}
 + L_{\text{pos-weighted}}
