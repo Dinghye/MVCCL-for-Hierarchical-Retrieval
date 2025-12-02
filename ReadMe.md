@@ -115,9 +115,7 @@ This loss explicitly promotes:
 In each stage, the total loss is:
 
 $$
-L = L_{\text{contrastive}}^{(\text{easy/med/hard})}
-+ L_{\text{pos-weighted}}
-+ \lambda_{\text{rank}} L_{\text{rank}}
+L = L_{\text{contrastive}}^{(\text{easy/med/hard})} + L_{\text{pos-weighted}} + \lambda_{\text{rank}} L_{\text{rank}}
 $$
 
 where $L_{\text{contrastive}}$ = InfoNCE with explicit negatives, $L_{\text{pos-weighted}}$ = short-distance reinforcement,	$L_{\text{rank}}$ = hierarchical ordering enforcement, $\lambda_{\text{rank}}$ = 1.0.
