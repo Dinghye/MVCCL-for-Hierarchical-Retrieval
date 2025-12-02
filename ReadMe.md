@@ -141,3 +141,4 @@ Current Result:
 | 7                      | 100.00%    | 0.00%                   | 0.00%       |
 | OVERALL                | 79.84%    | 41.79%                  | 36.92%      |
 
+![visual](recall_by_distance.png)
