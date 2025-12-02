@@ -44,9 +44,10 @@ Commonly adjustable parameters in `config.py`:
 - **Text and base vector**: Combine the lemma+definition of the synset into a text, encode it into a fixed vector using SBERT, and calculate the semantic neighbor list.
 - **Model**: Dual Tower `DualEncoder`, with fixed SBERT vectors, only training the **linear projections** of query/doc.
 - **Training three lines**:
-  - Regular: in-batch InfoNCE, with any ancestor as the positive sample.
-  - HR: Start from the Regular weights, only using long-distance positive samples for fine-tuning.
-  - MVCCL: Three-stage curriculum learning, gradually increasing the difficulty of negative samples (random → sibling nodes → semantic neighbors but with a different structure).
+
+    * `Regular`: in-batch InfoNCE, with any ancestor as the positive sample.
+    * `HR`: Start from the Regular weights, only using long-distance positive samples for fine-tuning.
+    * `MVCCL`: Three-stage curriculum learning, gradually increasing the difficulty of negative samples (random → sibling nodes → semantic neighbors but with a different structure).
 - **Evaluation**: Bucket the recall@K based on structural distance and draw a comparison curve.
 
 
